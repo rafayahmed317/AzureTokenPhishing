@@ -1,4 +1,4 @@
-sudo apt update && sudo apt-get install apache2 python3-pip
+sudo apt update && sudo apt-get install apache2 python3-pip python
 pip3 install requests watchdog
 cp ./html /var/www/
 cp ./phishing /var/www/
