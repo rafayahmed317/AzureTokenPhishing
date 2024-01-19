@@ -110,17 +110,6 @@ class CodeFileHandler(FileSystemEventHandler):
 def main():
     global client_id, client_secret, redirect_uri, scope
 
-    parser = argparse.ArgumentParser(description="OAuth Flow Script")
-    parser.add_argument("-client-id", required=True, help="Your OAuth Client ID")
-    parser.add_argument("-secret", required=True, help="Your OAuth Client Secret")
-    parser.add_argument("-redirect-uri", required=True, help="Your OAuth Redirect URI")
-    parser.add_argument("-scope", required=True, help="OAuth Scope")
-    args = parser.parse_args()
-    client_id = args.client_id
-    client_secret = args.secret
-    redirect_uri = args.redirect_uri
-    scope = args.scope
-
     path = "/var/www/html/codes/"  # Directory where the 'codes.txt' file is located
     codes_file_path = os.path.join(path, "codes.txt")
 
