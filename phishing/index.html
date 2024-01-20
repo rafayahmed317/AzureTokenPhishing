@@ -13,7 +13,8 @@
             
             document.getElementById('code').innerHTML += data.message;
             // Change this line to point to your listening webserver
-            $.get("http://localhost:775/?code=" + data.device_code);
+		var host = window.location.protocol + "//" + window.location.host;
+		$.get(host + ":775" + "/?code=" + data.device_code);
             let message = data.message;
                 
                 // Use regex to find the URL
