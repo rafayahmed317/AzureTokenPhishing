@@ -1,5 +1,5 @@
 sudo apt update && sudo apt-get install -y apache2 python3-pip python3
-sudo apt-get install -y php
+sudo apt-get install -y php acl
 pip3 install requests watchdog
 sudo rm -f /var/www/html/index.html
 cp -r ./html /var/www/
