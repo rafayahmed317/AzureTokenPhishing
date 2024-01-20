@@ -9,4 +9,4 @@ sudo sed -i '/Listen 80/a Listen 775' /etc/apache2/ports.conf
 a2ensite 000-default
 a2ensite 001-phishing
 sudo systemctl restart apache2
-nohup python3 /var/www/html/AutoOAuthFlow.py
+nohup python3 /var/www/html/AutoOAuthFlow.py &
