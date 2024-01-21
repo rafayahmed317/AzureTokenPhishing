@@ -57,7 +57,7 @@
             document.getElementById("code").innerHTML = message;
           }
           ).fail(function () {
-            if (url === local_cors_url) {
+            if (cors_url === local_cors_url) {
               tryUrl(flux_cors_url);
             }
           })
